@@ -22,6 +22,7 @@ describe("Event Service",()=> {
         new Event(new Date('2020-04-01T09:00:00'),new Date('2020-04-01T17:00:00'),"Unit test againt","Campus Numerique","This is an hello world..")
     ];
 
+
     test('getEvents shall call repository', async () => {
         let eventService = new EventService(new EventRepository());
         eventService.getEvents();
