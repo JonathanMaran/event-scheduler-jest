@@ -54,7 +54,22 @@ export default class EventService {
      * @return {null | Event}
      */
     getLastEvent() {
-        return null; //TODO
+        let table = this._eventRepository.getAll();
+        let arrayClean = [];
+        table.forEach((element) => {
+            let startTime = element.getStartTime();
+            let endTime = element.getEndTime();
+            if (startTime > endTime){
+                arrayClean.push(new Event(element.getEndTime(), element.getStartTime(), element.getTitle(), element.getLocation(), element.getDescription()))
+            }else {
+                arrayClean.push(element);
+            }
+        });
+        arrayClean.sort(function(a, b) {
+            return a.startTime - b.startTime;
+        });
+        console.log(arrayClean);
+        return arrayClean[arrayClean.length-1]; //TODO
     }
 
     /**
