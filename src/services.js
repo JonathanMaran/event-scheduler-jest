@@ -45,7 +45,6 @@ export default class EventService {
         arrayClean.sort(function(a, b) {
             return a.startTime - b.startTime;
         });
-        console.log(arrayClean);
         return arrayClean[0]; //TODO
     }
 
@@ -68,7 +67,6 @@ export default class EventService {
         arrayClean.sort(function(a, b) {
             return a.startTime - b.startTime;
         });
-        console.log(arrayClean);
         return arrayClean[arrayClean.length-1]; //TODO
     }
 
@@ -77,7 +75,37 @@ export default class EventService {
      * @return {null | Event}
      */
     getLongestEvent() {
-        return null; //TODO
+        let table = this._eventRepository.getAll();
+        let arrayClean = [];
+        table.forEach((element) => {
+            let startTime = element.getStartTime();
+            let endTime = element.getEndTime();
+            if (startTime > endTime) {
+                arrayClean.push(
+                    new Event(
+                        element.getEndTime(),
+                        element.getStartTime(),
+                        element.getTitle(),
+                        element.getLocation(),
+                        element.getDescription()
+                    )
+                );
+            } else {
+                arrayClean.push(element);
+            }
+        });
+        let time = 0;
+        let i = 0
+        let indexLonguest = -1;
+        arrayClean.forEach(element => {
+            let timedifference = element.getEndTime() - element.getStartTime();
+            if (timedifference > time) {
+                time = element.getEndTime() - element.getStartTime()
+                indexLonguest = i
+            }
+            i++;
+        });
+        return table[indexLonguest]; //TODO
     }
 
     /**
@@ -85,7 +113,37 @@ export default class EventService {
      * @return {null | Event}
      */
     getShortestEvent() {
-        return null; //TODO
+        let table = this._eventRepository.getAll();
+        let arrayClean = [];
+        table.forEach((element) => {
+            let startTime = element.getStartTime();
+            let endTime = element.getEndTime();
+            if (startTime > endTime) {
+                arrayClean.push(
+                    new Event(
+                        element.getEndTime(),
+                        element.getStartTime(),
+                        element.getTitle(),
+                        element.getLocation(),
+                        element.getDescription()
+                    )
+                );
+            } else {
+                arrayClean.push(element);
+            }
+        });
+        let time = 0;
+        let i = 0
+        let indexShortest = -1;
+        arrayClean.forEach(element => {
+            let timedifference = element.getEndTime() - element.getStartTime();
+            if ((timedifference < time) || (time === 0)){
+                time = element.getEndTime() - element.getStartTime()
+                indexShortest = i
+            }
+            i++;
+        });
+        return table[indexShortest]; //TODO
     }
 
     // A implementer en TDD
@@ -127,5 +185,5 @@ export default class EventService {
         let now = Date.now();
         return this.hasEventOn(new Date(now));
     }
-    
+
 }
